@@ -1,0 +1,5 @@
+outdir: "./outs"
+input: "test_sample.csv"
+#cutadapt
+read1_adapter: "AGATCGGAAGAGC"
+read2_adapter: "AGATCGGAAGAGC"

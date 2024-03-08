@@ -1,0 +1,2 @@
+sample,fastq_1,fastq_barcode,fastq_2
+test1,test_data/d1/test_1.fq.gz,test_data/d1/test_2.fq.gz,test_data/d1/test_3.fq.gz

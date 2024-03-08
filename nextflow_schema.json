@@ -285,5 +285,17 @@
         {
             "$ref": "#/definitions/generic_options"
         }
-    ]
+    ],
+    "properties": {
+        "read1_adapter": {
+            "type": "string",
+            "description": "cutadapter read1 adapter sequence",
+            "default": "AGATCGGAAGAGC"
+        },
+        "read2_adapter": {
+            "type": "string",
+            "default": "AGATCGGAAGAGC",
+            "description": "cutadapter read1 adapter sequence"
+        }
+    }
 }

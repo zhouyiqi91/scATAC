@@ -5,6 +5,7 @@
 */
 
 include { FASTQC                 } from '../modules/nf-core/fastqc/main'
+include { CUTADAPT                 } from '../modules/nf-core/cutadapt/main'
 include { MULTIQC                } from '../modules/nf-core/multiqc/main'
 include { paramsSummaryMap       } from 'plugin/nf-validation'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
@@ -35,6 +36,14 @@ workflow SCATAC {
     )
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
+
+    CUTADAPT(
+        ch_samplesheet.map{
+            meta, fastqs -> tuple(meta, [fastqs[0],fastqs[1]])
+        }
+    )
+    ch_multiqc_files = ch_multiqc_files.mix(CUTADAPT.out.log.collect{it[1]})
+    ch_versions = ch_versions.mix(CUTADAPT.out.versions.first())
 
     //
     // Collate and save software versions
