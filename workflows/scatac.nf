@@ -5,7 +5,8 @@
 */
 
 include { FASTQC                 } from '../modules/nf-core/fastqc/main'
-include { CUTADAPT                 } from '../modules/nf-core/cutadapt/main'
+include { CUTADAPT               } from '../modules/nf-core/cutadapt/main'
+include { BOWTIE2_ALIGN          } from '../modules/nf-core/bowtie2/align/main'
 include { MULTIQC                } from '../modules/nf-core/multiqc/main'
 include { paramsSummaryMap       } from 'plugin/nf-validation'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
@@ -44,6 +45,15 @@ workflow SCATAC {
     )
     ch_multiqc_files = ch_multiqc_files.mix(CUTADAPT.out.log.collect{it[1]})
     ch_versions = ch_versions.mix(CUTADAPT.out.versions.first())
+
+    BOWTIE2_ALIGN(
+        CUTADAPT.out.reads,
+        tuple(['id':'hg38'], params.genomeIndex),
+        false,
+        false
+    )
+    ch_multiqc_files = ch_multiqc_files.mix(BOWTIE2_ALIGN.out.log.collect{it[1]})
+    ch_versions = ch_versions.mix(BOWTIE2_ALIGN.out.versions.first())
 
     //
     // Collate and save software versions
