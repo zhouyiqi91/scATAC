@@ -9,9 +9,10 @@ process CUTADAPT {
 
     input:
     tuple val(meta), path(reads)
+    val(suffix)
 
     output:
-    tuple val(meta), path('*.trim.fastq.gz'), emit: reads
+    tuple val(meta), path("*.trim.fastq${suffix}"), emit: reads
     tuple val(meta), path('*.log')          , emit: log
     path "versions.yml"                     , emit: versions
 
@@ -21,7 +22,7 @@ process CUTADAPT {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def trimmed  = meta.single_end ? "-o ${prefix}.trim.fastq.gz" : "-o ${prefix}_1.trim.fastq.gz -p ${prefix}_2.trim.fastq.gz"
+    def trimmed  = meta.single_end ? "-o ${prefix}.trim.fastq${suffix}" : "-o ${prefix}_1.trim.fastq${suffix} -p ${prefix}_2.trim.fastq${suffix}"
     """
     cutadapt \\
         -Z \\
@@ -38,7 +39,8 @@ process CUTADAPT {
 
     stub:
     def prefix  = task.ext.prefix ?: "${meta.id}"
-    def trimmed = meta.single_end ? "${prefix}.trim.fastq.gz" : "${prefix}_1.trim.fastq.gz ${prefix}_2.trim.fastq.gz"
+    def suffix = gzip ? '.gz': ''
+    def trimmed  = meta.single_end ? "-o ${prefix}.trim.fastq${suffix}" : "-o ${prefix}_1.trim.fastq${suffix} -p ${prefix}_2.trim.fastq${suffix}"
     """
     touch ${prefix}.cutadapt.log
     touch ${trimmed}

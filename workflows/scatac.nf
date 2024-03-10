@@ -5,6 +5,7 @@
 */
 
 include { FASTQC                 } from '../modules/nf-core/fastqc/main'
+include { EXTRACT_BARCODE        } from '../modules/local/extract_barcode/main'
 include { CUTADAPT               } from '../modules/nf-core/cutadapt/main'
 include { BOWTIE2_ALIGN          } from '../modules/nf-core/bowtie2/align/main'
 include { MULTIQC                } from '../modules/nf-core/multiqc/main'
@@ -38,10 +39,13 @@ workflow SCATAC {
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
+    EXTRACT_BARCODE (
+        ch_samplesheet
+    )
+
     CUTADAPT(
-        ch_samplesheet.map{
-            meta, fastqs -> tuple(meta, [fastqs[0],fastqs[1]])
-        }
+        EXTRACT_BARCODE.out.reads,
+        ".gz"
     )
     ch_multiqc_files = ch_multiqc_files.mix(CUTADAPT.out.log.collect{it[1]})
     ch_versions = ch_versions.mix(CUTADAPT.out.versions.first())
