@@ -84,7 +84,7 @@ workflow PIPELINE_INITIALISATION {
         .fromSamplesheet("input")
         .map {
             meta, fastq_1, fastq_2, fastq_3 ->
-                if (!fastq_2) {
+                if (!fastq_3) {
                     return [ meta.id, meta + [ single_end:true ], [ fastq_1, fastq_2] ]
                 } else {
                     return [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2, fastq_3 ] ]
@@ -100,6 +100,27 @@ workflow PIPELINE_INITIALISATION {
         }
         .set { ch_samplesheet }
 
+    /* TODO handle one sample with multiple lines of fastq files
+    Channel
+        .fromSamplesheet("input")
+        .map {
+            meta, fastq_1, fastq_2, fastq_3 ->
+                if (!fastq_3) {
+                    return [ meta.id, meta + [ single_end:true ], [ fastq_1 ], [fastq_2] ]
+                } else {
+                    return [ meta.id, meta + [ single_end:false ], [ fastq_1 ], [fastq_2], [fastq_3 ] ]
+                }
+        }
+        .groupTuple()
+        .map {
+            validateInputSamplesheet(it)
+        }
+        .map {
+            meta, fastq_1, fastq_2, fast ->
+                return [ meta, fastqs.flatten() ]
+        }
+        .set { ch_samplesheet }
+    */
     emit:
     samplesheet = ch_samplesheet
     versions    = ch_versions

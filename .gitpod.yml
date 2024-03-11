@@ -20,3 +20,8 @@ vscode:
     - charliermarsh.ruff # Code linter Ruff
     - ms-toolsai.jupyter
     - ms-python.python
+
+additionalRepositories:
+  - url: git@github.com:zhouyiqi91/multiqc_sgr.git
+    # checkoutLocation is relative to /workspaces
+    checkoutLocation: backend
