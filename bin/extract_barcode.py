@@ -39,6 +39,7 @@ class Barcode:
         self.fq1_list = args.fq1.split(',')
         self.fq2_list = args.fq2.split(',')
         self.fq3_list = args.fq3.split(',')
+        self.len_bc = args.len_bc
 
         self.out_fq1 = f'{self.args.sample}_R1.fastq'
         self.out_fq3 = f'{self.args.sample}_R3.fastq'
@@ -169,12 +170,12 @@ class Barcode:
                     if umi:
                         umi += '_'
                     """
-                    cb = seq2
+                    cb = seq2[:self.len_bc]
                     umi = ''
-                    cb_umi = ':'.join([cb,umi])
+                    read_name = ':'.join([cb,umi,str(self.raw_reads)])
 
-                    self.fh_fq1.write(f'@{cb_umi}\n{seq1}\n+\n{qual1}\n')
-                    self.fh_fq3.write(f'@{cb_umi}\n{seq3}\n+\n{qual3}\n')
+                    self.fh_fq1.write(f'@{read_name}\n{seq1}\n+\n{qual1}\n')
+                    self.fh_fq3.write(f'@{read_name}\n{seq3}\n+\n{qual3}\n')
 
             self.close_files()
 
@@ -185,6 +186,7 @@ if __name__ == '__main__':
     parser.add_argument('--fq1', type=str, required=True, help='read1 file path')
     parser.add_argument('--fq2', type=str, required=True, help='read2 file path')
     parser.add_argument('--fq3', type=str, required=True, help='read3 file path')
+    parser.add_argument('--len_bc', type=int, required=True, help='length of barcode')
     args = parser.parse_args()
 
     barcode = Barcode(args)

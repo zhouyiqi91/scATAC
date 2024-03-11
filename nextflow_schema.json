@@ -140,7 +140,7 @@
                 "max_memory": {
                     "type": "string",
                     "description": "Maximum amount of memory that can be requested for any single job.",
-                    "default": "128.GB",
+                    "default": "30.GB",
                     "fa_icon": "fas fa-memory",
                     "pattern": "^\\d+(\\.\\d+)?\\.?\\s*(K|M|G|T)?B$",
                     "hidden": true,
@@ -300,6 +300,14 @@
         "genomeIndex": {
             "type": "string",
             "default": "/workspace/scATAC/genome/GRCh38_noalt_as"
+        },
+        "gtf": {
+            "type": "string",
+            "default": "/workspace/scATAC/genome/gencode.v45.annotation.gtf"
+        },
+        "len_bc": {
+            "type": "integer",
+            "default": 16
         }
     }
 }

@@ -8,6 +8,7 @@ include { FASTQC                 } from '../modules/nf-core/fastqc/main'
 include { EXTRACT_BARCODE        } from '../modules/local/extract_barcode/main'
 include { CUTADAPT               } from '../modules/nf-core/cutadapt/main'
 include { BOWTIE2_ALIGN          } from '../modules/nf-core/bowtie2/align/main'
+include { SNAPATAC2              } from '../modules/local/snapatac2/main'
 include { MULTIQC                } from '../modules/nf-core/multiqc/main'
 include { paramsSummaryMap       } from 'plugin/nf-validation'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
@@ -58,6 +59,8 @@ workflow SCATAC {
     )
     ch_multiqc_files = ch_multiqc_files.mix(BOWTIE2_ALIGN.out.log.collect{it[1]})
     ch_versions = ch_versions.mix(BOWTIE2_ALIGN.out.versions.first())
+
+    SNAPATAC2(BOWTIE2_ALIGN.out.aligned)
 
     //
     // Collate and save software versions

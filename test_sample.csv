@@ -1,2 +1,2 @@
-sample,fastq_1,fastq_barcode,fastq_2
-test1,test_data/d1/test_1.fq.gz,test_data/d1/test_2.fq.gz,test_data/d1/test_3.fq.gz
+sample,fastq_1,fastq_2,fastq_3
+10X_pbmc,/workspace/test_data/10X_pbmc/sub_1.fq.gz,/workspace/test_data/10X_pbmc/sub_2.fq.gz,/workspace/test_data/10X_pbmc/sub_3.fq.gz

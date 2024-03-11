@@ -1,0 +1,7 @@
+name: snapatac2
+channels:
+  - defaults
+dependencies:
+  - pip
+  - pip:
+      - snapatac2
